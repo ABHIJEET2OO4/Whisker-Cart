@@ -1,0 +1,159 @@
+<?php $url=fn($p)=>\Core\View::url($p); $s=$settings; $v=fn($g,$k)=>htmlspecialchars($s[$g][$k]??''); ?>
+<form method="POST" action="<?= $url('admin/settings/update') ?>">
+    <?= \Core\Session::csrfField() ?>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:900px">
+        <div>
+            <div class="wk-card" style="margin-bottom:20px">
+                <div class="wk-card-header"><h2>🏪 Store</h2></div>
+                <div class="wk-card-body">
+                    <div class="wk-form-group"><label>Store Name</label><input type="text" name="general_site_name" class="wk-input" value="<?= $v('general','site_name') ?>"></div>
+                    <div class="wk-form-group"><label>Tagline</label><input type="text" name="general_site_tagline" class="wk-input" value="<?= $v('general','site_tagline') ?>"></div>
+                    <div class="wk-form-group">
+                        <label>Store Logo URL</label>
+                        <input type="url" name="general_logo_url" class="wk-input" value="<?= $v('general','logo_url') ?>" placeholder="https://yourdomain.com/logo.png">
+                        <div style="font-size:11px;color:var(--wk-text-muted);margin-top:3px">Full URL to your logo image. Used in email templates and storefront. Upload your logo via File Manager and paste the URL here.</div>
+                        <?php if ($s['general']['logo_url'] ?? ''): ?>
+                        <div style="margin-top:8px;padding:12px;background:var(--wk-bg);border-radius:8px;text-align:center">
+                            <img src="<?= htmlspecialchars($s['general']['logo_url']) ?>" style="max-height:48px;max-width:200px" alt="Current logo">
+                            <div style="font-size:11px;color:var(--wk-text-muted);margin-top:4px">Current logo preview</div>
+                        </div>
+                        <?php endif; ?>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                        <div class="wk-form-group"><label>Currency</label><input type="text" name="general_currency" class="wk-input" value="<?= $v('general','currency') ?>"></div>
+                        <div class="wk-form-group"><label>Symbol</label><input type="text" name="general_currency_symbol" class="wk-input" value="<?= $v('general','currency_symbol') ?>"></div>
+                    </div>
+                    <div class="wk-form-group"><label>Timezone</label><input type="text" name="general_timezone" class="wk-input" value="<?= $v('general','timezone') ?>"></div>
+                    <div class="wk-form-group"><label>Contact Form Email</label><input type="email" name="general_contact_email" class="wk-input" value="<?= $v('general','contact_email') ?>" placeholder="support@yourstore.com"><div style="font-size:11px;color:var(--wk-text-muted);margin-top:3px">Contact form submissions are sent to this email. Falls back to admin email if empty.</div></div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                        <div class="wk-form-group"><label>Chatbot Name</label><input type="text" name="general_chatbot_name" class="wk-input" value="<?= $v('general','chatbot_name') ?>" placeholder="Whisker Bot"></div>
+                        <div class="wk-form-group"><label>Chatbot</label><select name="general_chatbot_enabled" class="wk-select"><option value="1" <?= ($s['general']['chatbot_enabled']??'1')==='1'?'selected':'' ?>>Enabled</option><option value="0" <?= ($s['general']['chatbot_enabled']??'1')==='0'?'selected':'' ?>>Disabled</option></select></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Theme Selector -->
+            <div class="wk-card">
+                <div class="wk-card-header"><h2>🎨 Store Theme</h2></div>
+                <div class="wk-card-body">
+                    <?php $currentTheme = $v('general','store_theme') ?: 'purple';
+                    $themes = [
+                        'purple'  => ['Whisker Purple', '#8b5cf6', '#ec4899', '#faf8f6', 'The original — purple & pink gradient, light cream background'],
+                        'ocean'   => ['Ocean Blue', '#0ea5e9', '#06b6d4', '#f0f9ff', 'Calm & professional — sky blue with teal accents'],
+                        'forest'  => ['Forest Green', '#16a34a', '#ca8a04', '#f7faf5', 'Earthy & natural — green with amber accents'],
+                        'sunset'  => ['Sunset Orange', '#f97316', '#e11d48', '#fffbf5', 'Warm & energetic — orange with coral accents'],
+                        'midnight'=> ['Midnight Dark', '#a78bfa', '#f472b6', '#0f0e17', 'Dark mode — deep backgrounds, vibrant accents'],
+                    ]; ?>
+                    <div style="display:grid;grid-template-columns:1fr;gap:10px">
+                        <?php foreach ($themes as $key => [$name, $c1, $c2, $bg, $desc]): ?>
+                        <label style="display:flex;align-items:center;gap:14px;padding:14px;border:2px solid <?= $currentTheme===$key?'var(--wk-purple)':'var(--wk-border)' ?>;border-radius:10px;cursor:pointer;transition:all .2s;background:<?= $currentTheme===$key?'var(--wk-purple-soft)':'transparent' ?>" onclick="this.parentElement.querySelectorAll('label').forEach(l=>{l.style.borderColor='var(--wk-border)';l.style.background='transparent'});this.style.borderColor='var(--wk-purple)';this.style.background='var(--wk-purple-soft)'">
+                            <input type="radio" name="general_store_theme" value="<?= $key ?>" <?= $currentTheme===$key?'checked':'' ?> style="accent-color:var(--wk-purple)">
+                            <div style="display:flex;gap:4px;flex-shrink:0">
+                                <div style="width:24px;height:24px;border-radius:6px;background:<?= $c1 ?>;border:2px solid rgba(0,0,0,.1)"></div>
+                                <div style="width:24px;height:24px;border-radius:6px;background:<?= $c2 ?>;border:2px solid rgba(0,0,0,.1)"></div>
+                                <div style="width:24px;height:24px;border-radius:6px;background:<?= $bg ?>;border:2px solid rgba(0,0,0,.15)"></div>
+                            </div>
+                            <div style="flex:1">
+                                <div style="font-weight:800;font-size:14px"><?= $name ?></div>
+                                <div style="font-size:11px;color:var(--wk-text-muted)"><?= $desc ?></div>
+                            </div>
+                            <?php if ($currentTheme===$key): ?><span class="wk-badge wk-badge-success">Active</span><?php endif; ?>
+                        </label>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </div>
+
+            <div class="wk-card">
+                <div class="wk-card-header"><h2>🛒 Checkout</h2></div>
+                <div class="wk-card-body">
+                    <div class="wk-form-group"><label>Tax Rate (%)</label><input type="number" step="0.01" name="checkout_tax_rate" class="wk-input" value="<?= $v('checkout','tax_rate') ?>"></div>
+                    <div class="wk-form-group">
+                        <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+                            <input type="checkbox" name="checkout_guest_checkout" value="1" <?= ($s['checkout']['guest_checkout']??'1')==='1'?'checked':'' ?>> Allow guest checkout
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="wk-card" style="margin-bottom:20px">
+                <div class="wk-card-header"><h2>📧 Email</h2></div>
+                <div class="wk-card-body">
+                    <div class="wk-form-group"><label>From Email</label><input type="email" name="email_from_email" class="wk-input" value="<?= $v('email','from_email') ?>"></div>
+                    <div class="wk-form-group"><label>From Name</label><input type="text" name="email_from_name" class="wk-input" value="<?= $v('email','from_name') ?>"></div>
+                </div>
+            </div>
+            <div class="wk-card" style="margin-bottom:20px">
+                <div class="wk-card-header"><h2>📮 SMTP <span style="font-weight:500;font-size:12px;color:var(--wk-text-muted)">(optional)</span></h2></div>
+                <div class="wk-card-body">
+                    <p style="font-size:12px;color:var(--wk-text-muted);margin-bottom:14px">Leave empty to use PHP's built-in mail(). Fill in to use SMTP for reliable delivery.</p>
+                    <div class="wk-form-group"><label>SMTP Host</label><input type="text" name="email_smtp_host" id="smtpHost" class="wk-input" value="<?= $v('email','smtp_host') ?>" placeholder="smtp.gmail.com"></div>
+                    <div class="wk-form-group"><label>SMTP Port</label><input type="number" name="email_smtp_port" id="smtpPort" class="wk-input" value="<?= $v('email','smtp_port') ?>" placeholder="587"></div>
+                    <div class="wk-form-group"><label>SMTP Username</label><input type="text" name="email_smtp_user" id="smtpUser" class="wk-input" value="<?= $v('email','smtp_user') ?>"></div>
+                    <div class="wk-form-group"><label>SMTP Password</label><input type="password" name="email_smtp_pass" id="smtpPass" class="wk-input" value="<?= $v('email','smtp_pass') ?>"></div>
+
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px">
+                        <button type="button" onclick="testSmtpConnection()" id="testConnBtn" class="wk-btn wk-btn-secondary" style="justify-content:center">🔌 Test Connection</button>
+                        <button type="button" onclick="sendTestEmail()" id="testEmailBtn" class="wk-btn wk-btn-secondary" style="justify-content:center">📧 Send Test Email</button>
+                    </div>
+                    <div id="smtpTestResult" style="margin-top:10px;font-size:13px;font-weight:700;min-height:20px"></div>
+                </div>
+            </div>
+            <button type="submit" class="wk-btn wk-btn-primary" style="width:100%;justify-content:center">Save Settings</button>
+        </div>
+    </div>
+</form>
+
+<script>
+async function testSmtpConnection() {
+    const btn = document.getElementById('testConnBtn');
+    const result = document.getElementById('smtpTestResult');
+    const host = document.getElementById('smtpHost').value.trim();
+    const port = document.getElementById('smtpPort').value.trim();
+    const user = document.getElementById('smtpUser').value.trim();
+    const pass = document.getElementById('smtpPass').value;
+
+    if (!host) { result.innerHTML = '<span style="color:var(--wk-red)">Enter SMTP host first</span>'; return; }
+
+    btn.disabled = true; btn.textContent = 'Testing...'; result.innerHTML = '';
+    const form = new FormData();
+    form.append('action', 'test_connection');
+    form.append('host', host); form.append('port', port || '587');
+    form.append('user', user); form.append('pass', pass);
+
+    try {
+        const res = await fetch('<?= \Core\View::url('admin/settings/test-smtp') ?>', {method:'POST', body:form});
+        const data = await res.json();
+        result.innerHTML = data.success
+            ? '<span style="color:var(--wk-green)">✅ ' + data.message + '</span>'
+            : '<span style="color:var(--wk-red)">❌ ' + data.message + '</span>';
+    } catch(e) { result.innerHTML = '<span style="color:var(--wk-red)">❌ Network error</span>'; }
+    btn.disabled = false; btn.textContent = '🔌 Test Connection';
+}
+
+async function sendTestEmail() {
+    const btn = document.getElementById('testEmailBtn');
+    const result = document.getElementById('smtpTestResult');
+    const email = prompt('Send test email to:', document.querySelector('input[name="email_from_email"]')?.value || '');
+    if (!email) return;
+
+    btn.disabled = true; btn.textContent = 'Sending...'; result.innerHTML = '';
+    const form = new FormData();
+    form.append('action', 'test_email');
+    form.append('to', email);
+    form.append('host', document.getElementById('smtpHost').value);
+    form.append('port', document.getElementById('smtpPort').value || '587');
+    form.append('user', document.getElementById('smtpUser').value);
+    form.append('pass', document.getElementById('smtpPass').value);
+
+    try {
+        const res = await fetch('<?= \Core\View::url('admin/settings/test-smtp') ?>', {method:'POST', body:form});
+        const data = await res.json();
+        result.innerHTML = data.success
+            ? '<span style="color:var(--wk-green)">✅ ' + data.message + '</span>'
+            : '<span style="color:var(--wk-red)">❌ ' + data.message + '</span>';
+    } catch(e) { result.innerHTML = '<span style="color:var(--wk-red)">❌ Network error</span>'; }
+    btn.disabled = false; btn.textContent = '📧 Send Test Email';
+}
+</script>

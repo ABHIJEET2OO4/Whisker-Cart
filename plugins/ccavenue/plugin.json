@@ -1,0 +1,9 @@
+{
+    "name": "CCAvenue",
+    "code": "ccavenue",
+    "version": "1.0.0",
+    "author": "Whisker",
+    "type": "payment_gateway",
+    "class": "CCAvenueGateway",
+    "description": "India's largest payment gateway"
+}

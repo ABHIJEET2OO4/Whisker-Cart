@@ -1,0 +1,9 @@
+{
+    "name": "NOWPayments",
+    "code": "nowpayments",
+    "version": "1.0.0",
+    "author": "Whisker",
+    "type": "payment_gateway",
+    "class": "NowPaymentsGateway",
+    "description": "Bitcoin, Ethereum & 300+ crypto"
+}

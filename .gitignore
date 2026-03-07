@@ -1,0 +1,27 @@
+# Config (contains credentials)
+config/config.php
+config/database.php
+
+# Storage
+storage/.installed
+storage/cache/*
+storage/logs/*
+storage/uploads/products/*
+!storage/cache/.gitkeep
+!storage/logs/.gitkeep
+!storage/uploads/products/.gitkeep
+
+# Generated files
+sitemap.xml
+robots.txt
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# IDE
+.idea/
+.vscode/
+*.sublime-*

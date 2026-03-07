@@ -1,0 +1,49 @@
+Options -MultiViews -Indexes
+RewriteEngine On
+
+# Handle Authorization Header
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# If the file or directory exists, serve it directly
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Otherwise route through index.php
+RewriteRule ^(.*)$ index.php [QSA,L]
+
+# Block sensitive directories
+RewriteRule ^app/ - [F,L]
+RewriteRule ^core/ - [F,L]
+RewriteRule ^config/ - [F,L]
+RewriteRule ^storage/logs/ - [F,L]
+RewriteRule ^storage/cache/ - [F,L]
+RewriteRule ^sql/ - [F,L]
+RewriteRule ^views/ - [F,L]
+RewriteRule ^plugins/.*\.php$ - [F,L]
+
+# Block sensitive files
+<FilesMatch "\.(env|sql|sh|lock|log|md|json)$">
+    Require all denied
+</FilesMatch>
+
+# Block hidden files
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
+
+# Security Headers
+<IfModule mod_headers.c>
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+    Header set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+</IfModule>
+
+# Prevent PHP execution in uploads
+<IfModule mod_rewrite.c>
+    RewriteRule ^storage/uploads/.*\.php$ - [F,L]
+</IfModule>
+
+AddDefaultCharset UTF-8
